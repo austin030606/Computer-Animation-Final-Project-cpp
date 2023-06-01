@@ -14,6 +14,8 @@ public:
     float velocityY_prev[N + 2][N + 2];
     float dt;
     float forceStrength;
+    bool square_bnd;
+    int sqr_bnd_size;
 
     Fluid(){
         dt = 0.0001f;
@@ -28,6 +30,8 @@ public:
                 velocityY_prev[i][j] = 0;
             }
         }
+        square_bnd = false;
+        sqr_bnd_size = 10;
     }
     
     void clear() {
@@ -54,6 +58,23 @@ public:
         x[0][N + 1]     = 0.5 * (x[1][N + 1] + x[0][N]);
         x[N + 1][0]     = 0.5 * (x[N][0] + x[N + 1][1]);
         x[N + 1][N + 1] = 0.5 * (x[N][N + 1] + x[N + 1][N]);
+
+        if(square_bnd){
+            int sqr_flr = int(N / 2) - sqr_bnd_size;
+            int sqr_cel = int(N / 2) + sqr_bnd_size;
+            for(int i = sqr_flr; i <= sqr_cel; i++){
+                x[sqr_flr][i]     = b == 1 ? -1 * x[sqr_flr - 1][i]: x[sqr_flr - 1][i];
+                x[sqr_cel][i]     = b == 1 ? -1 * x[sqr_cel + 1][i]: x[sqr_cel + 1][i];
+                x[i][sqr_flr]     = b == 2 ? -1 * x[i][sqr_flr - 1]: x[i][sqr_flr - 1];
+                x[i][sqr_cel + 0] = b == 2 ? -1 * x[i][sqr_cel + 1]: x[i][sqr_cel + 1];
+            }
+            for(int i = sqr_flr + 1; i < sqr_cel; i++){
+                for(int j = sqr_flr + 1; j < sqr_cel; j++){
+                    x[i][j] = 0;
+                }
+            }
+        }
+
     }
 
     void diffuse(int b, float x[N + 2][N + 2], float x0[N + 2][N + 2]) {
@@ -61,6 +82,13 @@ public:
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
+                    if(square_bnd){
+                        int tmpbnd = sqr_bnd_size - 1;
+                        if((j < N/2 + tmpbnd) && (j > N/2 - tmpbnd) && (i < N/2 + tmpbnd) && (i > N/2 - tmpbnd)){
+                            continue;
+                        }
+                    }
+
                     x[i][j] = (x0[i][j] + a * (x[i - 1][j] + x[i + 1][j] + x[i][j - 1] + x[i][j + 1])) / (1 + 4 * a);
                 }
             }
@@ -166,5 +194,9 @@ public:
 
     void addVelocityY(int r, int c, float amount) {
         velocityY[r][c] += amount;
+    }
+
+    void addSqrBnd(){
+        square_bnd == true ? square_bnd = false: square_bnd = true;
     }
 };

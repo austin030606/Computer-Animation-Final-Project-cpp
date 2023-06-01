@@ -48,6 +48,7 @@ int main() {
             }
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
+                    fluid.addSqrBnd();
                     std::cout << "the space key was pressed" << std::endl;
                 }
             }
