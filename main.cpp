@@ -6,7 +6,7 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "My window");
-    bool holding = false, update = true;
+    bool holding = false, update = true, vac = false;
     Fluid fluid = Fluid();
     float tmp = N + 2;
     float cellSize = WINDOW_SIZE / tmp;
@@ -60,6 +60,10 @@ int main() {
                     update = !update;
                     std::cout << "the s key was pressed" << std::endl;
                 }
+                if (event.key.code == sf::Keyboard::V) {
+                    vac = !vac;
+                    std::cout << "the v key was pressed" << std::endl;
+                }
                 if (event.key.code == sf::Keyboard::T){
                     for (int i = 0; i < N -10; i++) {
                         for (int j = 0; j < N -10; j++) {
@@ -67,6 +71,14 @@ int main() {
                         }
                     }
                 }
+            }
+        }
+
+        if (vac) {
+            for (int i = 0; i < 10; i++) {
+                fluid.setVelocityX(i, i, 10000);
+                fluid.setVelocityY(i, i, 10000);
+                fluid.addDensity(i, i, 500);
             }
 
         }
