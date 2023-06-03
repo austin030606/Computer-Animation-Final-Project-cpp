@@ -52,11 +52,23 @@ int main() {
                     fluid.addSqrBnd();
                     std::cout << "the space key was pressed" << std::endl;
                 }
+                if (event.key.code == sf::Keyboard::B) {
+                    fluid.addBckBnd();
+                    std::cout << "the space key was pressed" << std::endl;
+                }
                 if (event.key.code == sf::Keyboard::S) {
                     update = !update;
                     std::cout << "the s key was pressed" << std::endl;
                 }
+                if (event.key.code == sf::Keyboard::T){
+                    for (int i = 0; i < N -10; i++) {
+                        for (int j = 0; j < N -10; j++) {
+                            fluid.setVelocityX(i, j, 1000);
+                        }
+                    }
+                }
             }
+
         }
 
         // for (int i = 0; i < N + 2; i++) {

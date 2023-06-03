@@ -1,5 +1,5 @@
 #include <iostream>
-#define N 100
+#define N 50
 #define K 20
 #define MAX_VELOCITY 10000000
 #define MIN_VELOCITY -10000000
@@ -14,7 +14,7 @@ public:
     float velocityY_prev[N + 2][N + 2];
     float dt;
     float forceStrength;
-    bool square_bnd;
+    bool square_bnd, block_bnd;
     int sqr_bnd_size;
 
     Fluid(){
@@ -31,7 +31,8 @@ public:
             }
         }
         square_bnd = false;
-        sqr_bnd_size = 10;
+        block_bnd = false;
+        sqr_bnd_size = 5;
     }
     
     void clear() {
@@ -66,7 +67,22 @@ public:
                 x[sqr_flr][i]     = b == 1 ? -1 * x[sqr_flr - 1][i]: x[sqr_flr - 1][i];
                 x[sqr_cel][i]     = b == 1 ? -1 * x[sqr_cel + 1][i]: x[sqr_cel + 1][i];
                 x[i][sqr_flr]     = b == 2 ? -1 * x[i][sqr_flr - 1]: x[i][sqr_flr - 1];
-                x[i][sqr_cel + 0] = b == 2 ? -1 * x[i][sqr_cel + 1]: x[i][sqr_cel + 1];
+                x[i][sqr_cel] = b == 2 ? -1 * x[i][sqr_cel + 1]: x[i][sqr_cel + 1];
+            }
+            for(int i = sqr_flr + 1; i < sqr_cel; i++){
+                for(int j = sqr_flr + 1; j < sqr_cel; j++){
+                    x[i][j] = 0;
+                }
+            }
+        }
+        if(block_bnd){
+            int sqr_flr = int(N / 2) - 10 - sqr_bnd_size;
+            int sqr_cel = int(N / 2) - 10 + sqr_bnd_size;
+            for(int i = sqr_flr; i <= sqr_cel; i++){
+                x[sqr_flr][i]     = b == 1 ? -1 * x[sqr_flr - 1][i]: x[sqr_flr - 1][i];
+                x[sqr_cel][i]     = b == 1 ? -1 * x[sqr_cel + 1][i]: x[sqr_cel + 1][i];
+                x[i][sqr_flr]     = b == 2 ? -1 * x[i][sqr_flr - 1]: x[i][sqr_flr - 1];
+                x[i][sqr_cel] = b == 2 ? -1 * x[i][sqr_cel + 1]: x[i][sqr_cel + 1];
             }
             for(int i = sqr_flr + 1; i < sqr_cel; i++){
                 for(int j = sqr_flr + 1; j < sqr_cel; j++){
@@ -78,13 +94,19 @@ public:
     }
 
     void diffuse(int b, float x[N + 2][N + 2], float x0[N + 2][N + 2]) {
-        float a = dt * N * N;
+        float a = dt * N * N * 0.1;
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
                     if(square_bnd){
                         int tmpbnd = sqr_bnd_size - 1;
                         if((j < N/2 + tmpbnd) && (j > N/2 - tmpbnd) && (i < N/2 + tmpbnd) && (i > N/2 - tmpbnd)){
+                            continue;
+                        }
+                    }
+                    if(block_bnd){
+                        int tmpbnd = sqr_bnd_size - 1;
+                        if((j < N/2 - 10 + tmpbnd) && (j > N/2 - 10 - tmpbnd) && (i < N/2 - 10 + tmpbnd) && (i > N/2 - 10 - tmpbnd)){
                             continue;
                         }
                     }
@@ -210,5 +232,8 @@ public:
 
     void addSqrBnd(){
         square_bnd == true ? square_bnd = false: square_bnd = true;
+    }
+    void addBckBnd(){
+        block_bnd == true ? block_bnd = false: block_bnd = true;
     }
 };
