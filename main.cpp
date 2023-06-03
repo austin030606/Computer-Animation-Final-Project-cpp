@@ -30,20 +30,20 @@ int main() {
                 if (row >= N + 2) row = N + 1;
                 if (col >= N + 2) col = N + 1;
                 fluid.addDensity(row, col, 10000);
-                fluid.addVelocityX(row, col, 10000);
-                fluid.addVelocityY(row, col, 10000);
+                // fluid.addVelocityX(row, col, 1000);
+                // fluid.addVelocityY(row, col, 1000);
             }
             if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                 holding = false;
             }
-            if (event.type == sf::Event::MouseMoved) {
+            if (event.type == sf::Event::MouseMoved && update) {
                 sf::Vector2i pos = sf::Mouse::getPosition(window);
                 int row = (int)(pos.x / cellSize), col = (int)(pos.y / cellSize);
                 // std::cout << row << ' ' << col << '\n';
                 if (row >= N + 2) row = N + 1;
                 if (col >= N + 2) col = N + 1;
-                fluid.addVelocityX(row, col, 10000 * (pos.x - x_prev));
-                fluid.addVelocityY(row, col, 10000 * (pos.y - y_prev));
+                fluid.addVelocityX(row, col, 1000 * (pos.x - x_prev));
+                fluid.addVelocityY(row, col, 1000 * (pos.y - y_prev));
                 x_prev = pos.x;
                 y_prev = pos.y;
             }
@@ -61,14 +61,14 @@ int main() {
 
         // for (int i = 0; i < N + 2; i++) {
         //     for (int j = 0; j < N + 2; j++) {
-        //         if (i == N / 2 + 20 && j < 5) {
-        //             fluid.setVelocityY(i, j, 100000);
-        //             fluid.addDensity(i, j, 100);
+        //         if ((i == N / 2 - 1|| i == N / 2) && j < 10) {
+        //             fluid.setVelocityY(i, j, 10000);
+        //             fluid.addDensity(i, j, 500);
         //         }
-        //         if (i == N / 2 - 20 && j > N - 3) {
-        //             fluid.setVelocityY(i, j, -100000);
-        //             fluid.addDensity(i, j, 100);
-        //         }
+        //         // if (i == N / 2 && j > N - 10) {
+        //         //     fluid.setVelocityY(i, j, -100000);
+        //         //     fluid.addDensity(i, j, 500);
+        //         // }
         //     }
         // }
         if (update) fluid.Update();

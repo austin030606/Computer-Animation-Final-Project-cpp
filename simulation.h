@@ -1,5 +1,5 @@
 #include <iostream>
-#define N 130
+#define N 100
 #define K 20
 #define MAX_VELOCITY 10000000
 #define MIN_VELOCITY -10000000
