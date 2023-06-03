@@ -6,7 +6,7 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "My window");
-    bool holding = false, update = true, vac = false;
+    bool holding = false, update = true, vac = false, changeColor = false;
     Fluid fluid = Fluid();
     float tmp = N + 2;
     float cellSize = WINDOW_SIZE / tmp;
@@ -64,9 +64,13 @@ int main() {
                     vac = !vac;
                     std::cout << "the v key was pressed" << std::endl;
                 }
+                if (event.key.code == sf::Keyboard::C) {
+                    changeColor = !changeColor;
+                    std::cout << "the c key was pressed" << std::endl;
+                }
                 if (event.key.code == sf::Keyboard::T){
-                    for (int i = 0; i < N -10; i++) {
-                        for (int j = 0; j < N -10; j++) {
+                    for (int i = 0; i < N -40; i++) {
+                        for (int j = 0; j < N -40; j++) {
                             fluid.setVelocityX(i, j, 1000);
                         }
                     }
@@ -103,7 +107,8 @@ int main() {
                     sf::RectangleShape box(sf::Vector2f(cellSize, cellSize));
                     box.setPosition(i * cellSize, j * cellSize);
                     int intensity = fluid.density[i][j] < 255 ? fluid.density[i][j] : 255;
-                    box.setFillColor(sf::Color(intensity, intensity, intensity));
+                    if (changeColor) box.setFillColor(sf::Color(sin(intensity) * 130 + 10 * intensity, 170, 170));
+                    else box.setFillColor(sf::Color(intensity, intensity, intensity));
                     window.draw(box);
                 }
             }

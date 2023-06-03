@@ -1,5 +1,5 @@
 #include <iostream>
-#define N 50
+#define N 130
 #define K 20
 #define MAX_VELOCITY 10000000
 #define MIN_VELOCITY -10000000
@@ -32,7 +32,7 @@ public:
         }
         square_bnd = false;
         block_bnd = false;
-        sqr_bnd_size = 5;
+        sqr_bnd_size = 10;
     }
     
     void clear() {
@@ -96,7 +96,8 @@ public:
     }
 
     void diffuse(int b, float x[N + 2][N + 2], float x0[N + 2][N + 2]) {
-        float a = dt * N * N * 0.1;
+        // code from paper - start
+        float a = dt * N * N * 0.3;
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
