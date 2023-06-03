@@ -135,7 +135,7 @@ public:
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
-                    p[i][j] = (div[i][j] + p[i - 1][j] + p[i + 1][j] + p[i][j - 1] + p[i][j + 1]) / 100;
+                    p[i][j] = (div[i][j] + p[i - 1][j] + p[i + 1][j] + p[i][j - 1] + p[i][j + 1]) / 4;
                 }
             }
             set_bnd(0, p);
@@ -194,6 +194,18 @@ public:
 
     void addVelocityY(int r, int c, float amount) {
         velocityY[r][c] += amount;
+    }
+
+    void setDensity(int r, int c, float amount) {
+        density[r][c] = amount;
+    }
+
+    void setVelocityX(int r, int c, float amount) {
+        velocityX[r][c] = amount;
+    }
+
+    void setVelocityY(int r, int c, float amount) {
+        velocityY[r][c] = amount;
     }
 
     void addSqrBnd(){
