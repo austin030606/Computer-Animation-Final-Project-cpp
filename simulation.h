@@ -48,6 +48,7 @@ public:
     }
 
     void set_bnd(int b, float x[N + 2][N + 2]) {
+        // code from paper - start
         for (int i = 1; i <= N; i++) {
             x[0][i]     = b == 1 ? -1 * x[1][i]: x[1][i];
             x[N + 1][i] = b == 1 ? -1 * x[N][i]: x[N][i];
@@ -58,6 +59,7 @@ public:
         x[0][N + 1]     = 0.5 * (x[1][N + 1] + x[0][N]);
         x[N + 1][0]     = 0.5 * (x[N][0] + x[N + 1][1]);
         x[N + 1][N + 1] = 0.5 * (x[N][N + 1] + x[N + 1][N]);
+        // code from paper - end
 
         if(square_bnd){
             int sqr_flr = int(N / 2) - sqr_bnd_size;
@@ -78,6 +80,7 @@ public:
     }
 
     void diffuse(int b, float x[N + 2][N + 2], float x0[N + 2][N + 2]) {
+        // code from paper - start
         float a = dt * N * N;
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
@@ -94,9 +97,11 @@ public:
             }
             set_bnd(b, x);
         }
+        // code from paper - end
     }
 
     void advect(int b, float d[N + 2][N + 2], float d0[N + 2][N + 2], float u[N + 2][N + 2], float v[N + 2][N + 2]) {
+        // code from paper - start
         float dt0 = dt * N;
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
@@ -114,6 +119,7 @@ public:
             }
         }
         set_bnd(b, d);
+        // code from paper - end
     }
 
     void densityUpdate() {
@@ -122,6 +128,7 @@ public:
     }
 
     void project(float u[N + 2][N + 2], float v[N + 2][N + 2], float p[N + 2][N + 2], float div[N + 2][N + 2]) {
+        // code from paper - start
         float h = 1.0f / N;
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
@@ -149,6 +156,7 @@ public:
         }
         set_bnd(1, u);
         set_bnd(2, v);
+        // code from paper - end
     }
 
     void velocityUpdate() {
