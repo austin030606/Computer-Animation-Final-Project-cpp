@@ -164,6 +164,18 @@ public:
         for (int k = 0; k < K; k++) {
             for (int i = 1; i <= N; i++) {
                 for (int j = 1; j <= N; j++) {
+                    if(square_bnd){
+                        int tmpbnd = sqr_bnd_size - 1;
+                        if((j < N/2 + tmpbnd) && (j > N/2 - tmpbnd) && (i < N/2 + tmpbnd) && (i > N/2 - tmpbnd)){
+                            continue;
+                        }
+                    }
+                    if(block_bnd){
+                        int tmpbnd = sqr_bnd_size - 1;
+                        if((j < N/2 - 10 + tmpbnd) && (j > N/2 - 10 - tmpbnd) && (i < N/2 - 10 + tmpbnd) && (i > N/2 - 10 - tmpbnd)){
+                            continue;
+                        }
+                    }
                     p[i][j] = (div[i][j] + p[i - 1][j] + p[i + 1][j] + p[i][j - 1] + p[i][j + 1]) / 4;
                 }
             }
